@@ -43,26 +43,22 @@ public class LoginServlet extends HttpServlet {
 		
 		// Recherche du user correspond au login & password
 		UserDTO userSecured = null;
-		Boolean credential = false;
+		
 		for (UserDTO userDTO : userDTOs)
 		{
 			if( userDTO.getLogin().compareTo(login) == 0 && userDTO.getPassword().compareTo(password) == 0 )
 			{
 				userSecured = userDTO;
-				credential = true;
 				break;
 			}
 		}
 		
-		// Si un user s'est connecté, on stock le user en session (utiliser par le filtre)
+		// Si un user s'est connecté, on stock le user en session (utilisé par le filtre)
 		if ( userSecured != null )
 		{
 			request.getSession().setAttribute("connectedUser", userSecured);
 		}
-		else
-		{
-			request.setAttribute("credential", credential);
-		}
+
 	}
 
 }

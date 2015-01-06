@@ -11,7 +11,10 @@
 <title>TP JSP - UserList page</title>
 </head>
 <body>
-		<table>
+	<%--TP7 : inclusion d'un composant header contenant le login du user --%>
+	<jsp:include page="Header.jsp"></jsp:include>
+	
+	<table>
 			<tr>
 				<th>Login</th>
 			</tr>

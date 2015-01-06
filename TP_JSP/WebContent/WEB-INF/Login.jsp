@@ -11,7 +11,10 @@
 <body>
 		<header>
 			<c:if test="${connectedUser == null}">
-				<span>Please, connection required</span>
+				<c:out value="Please, connection is required"></c:out>
+			</c:if>
+			<c:if test="${connectedUser == null} && ${credential == false}">
+				<c:out value="Please try again, login or password typing error"></c:out>
 			</c:if>
 		</header>
 		

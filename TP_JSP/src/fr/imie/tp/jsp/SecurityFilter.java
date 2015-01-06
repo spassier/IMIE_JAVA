@@ -64,7 +64,7 @@ public class SecurityFilter implements Filter {
 			// Track l'url redirigée pour fournir l'url APRES le login 
 			httpServletRequest.getSession().setAttribute("askedResource", url);
 			// ...alors on fait la redirection vers la page login
-			httpServletResponse.sendRedirect("./LoginServlet");
+			httpServletResponse.sendRedirect("LoginServlet"); // ./LoginServlet
 		}
 		else
 		{
@@ -82,10 +82,15 @@ public class SecurityFilter implements Filter {
 			if ( askedResource == null )
 				askedResource = "UserListServlet";
 			
+			httpServletRequest.getSession().removeAttribute("askedResource");
 			httpServletResponse.sendRedirect(askedResource);
+		} // Redirection vers la page de login si le user n'est pplus connecté mais l'était avant
+		else if (connectedUser != null && recentConnectedUser == null)
+		{
+			httpServletResponse.sendRedirect("LoginServlet");
 		}
 	}
-
+	
 	/**
 	 * @see Filter#init(FilterConfig)
 	 */
