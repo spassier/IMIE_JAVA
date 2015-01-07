@@ -58,6 +58,11 @@ public class LoginServlet extends HttpServlet {
 		{
 			request.getSession().setAttribute("connectedUser", userSecured);
 		}
+		else
+		{
+			request.getSession().setAttribute("errorMessage", "Login or password error, please retry");
+			request.getRequestDispatcher("/WEB-INF/Login.jsp").forward(request, response);
+		}
 
 	}
 

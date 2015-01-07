@@ -36,9 +36,21 @@ public class UserListener implements HttpSessionListener {
         userDTO2.setLogin("titi");
         userDTO2.setPassword("titi");
         
+        UserDTO userDTO3 = new UserDTO();
+        userDTO3.setId(3);
+        userDTO3.setLogin("tutu");
+        userDTO3.setPassword("tutu");
+        
+        UserDTO userDTO4 = new UserDTO();
+        userDTO4.setId(4);
+        userDTO4.setLogin("tata");
+        userDTO4.setPassword("tata");
+        
         List<UserDTO> userDTOs = new ArrayList<UserDTO>();
         userDTOs.add(userDTO1);
         userDTOs.add(userDTO2);
+        userDTOs.add(userDTO3);
+        userDTOs.add(userDTO4);
         arg0.getSession().setAttribute("userDTOs", userDTOs);
     }
 

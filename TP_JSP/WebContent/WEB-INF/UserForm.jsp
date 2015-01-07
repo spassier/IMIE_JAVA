@@ -13,12 +13,13 @@
 	<%--TP7 : inclusion d'un composant header contenant le login du user  --%>
 	<jsp:include page="Header.jsp"></jsp:include>
 	
-	<% UserDTO userDTO = (UserDTO)request.getAttribute("user");	%>
-		<form>
+		<form method="post">
 			<label>Login</label>
-			<input type="text" value="<%=userDTO.getLogin()%>" />
+			<input type="text" value="${user.login}" readonly />
 			<label>Password</label>
-			<input type="password" value="<%=userDTO.getPassword()%>" />
+			<input type="text" name="passwordInput" value="${user.password}" />
+			<%--TP10 : inclure un bouton pour updater  --%>
+			<input class="btn btn-danger" type="submit" value="Update" />
 		</form>
 </body>
 </html>

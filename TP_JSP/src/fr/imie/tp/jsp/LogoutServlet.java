@@ -29,7 +29,7 @@ public class LogoutServlet extends HttpServlet {
 		// Remove de la session de la variable connectedUser
 		request.getSession().removeAttribute("connectedUser");
 		
-		// 
+		// Le "referer" corresponds au head de la page ce qui permet de la tracker pour savoir ou était le user à la deconnexion
 		request.getSession().setAttribute("askedResource", request.getHeader("referer"));
 	}
 

@@ -7,8 +7,10 @@
 <!DOCTYPE>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>TP JSP - UserList page</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<title>TP JSP - UserList page</title>
 </head>
 <body>
 	<%--TP7 : inclusion d'un composant header contenant le login du user --%>
@@ -18,15 +20,24 @@
 			<tr>
 				<th>Login</th>
 			</tr>
-			<%	List<UserDTO> dtos = (List<UserDTO>) request.getAttribute("users"); %>
-			<%	for (UserDTO userDTO : dtos) { %>
+			<c:forEach items="${users}" var="user">
+				<tr>
+					<td><c:out value="${user.login}"></c:out></td>
+					<td><a class="btn btn-primary" href="UserFormServlet?id=${user.id}">Edit</a></td>
+					<%-- TP8 : ajouter un bouton "delete" et realiser la suppression d'un user --%>
+					<td>
+						<form method="post">
+							<input type="hidden" name="deleteInput" value="${user.id}" />
+							<input class="btn btn-danger" type="submit" value="Delete" />
+						</form>
+					</td>
+				</tr>
+			</c:forEach>
 			<tr>
-				<td><a href="UserFormServlet?id=<%=userDTO.getId()%>"><%=userDTO.getLogin()%></a></td>
+				<td>
+					<td><a class="btn btn-primary" href="UserFormServlet?id=-1">Create</a></td>
+				</td>
 			</tr>
-			<tr>
-				<td><%=userDTO.getPassword() %></td>
-			</tr>
-			<% } %>
-		</table>
+	</table>
 </body>
 </html>

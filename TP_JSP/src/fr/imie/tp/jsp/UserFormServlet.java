@@ -54,5 +54,25 @@ public class UserFormServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TP10 : inclure un bouton pour updater
+		String newPassword = request.getParameter("passwordInput");
+		Integer id = Integer.valueOf(request.getParameter("id"));
+		
+		List<UserDTO> userDTOs = (List<UserDTO>)request.getSession().getAttribute("userDTOs");
+		UserDTO userToUpdate = null;
+		for (UserDTO userDTO : userDTOs)
+		{
+			if( userDTO.getId() == id )
+			{
+				userToUpdate = userDTO;
+				break;
+			}
+		}
+		
+		// MAJ du password dans la liste des user DTO
+		userToUpdate.setPassword(newPassword);
+			
+		// Redirection du resultat à la servlet user list
+		response.sendRedirect("UserListServlet");
 	}
 }
