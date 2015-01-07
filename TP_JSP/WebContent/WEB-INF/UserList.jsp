@@ -35,7 +35,8 @@
 			</c:forEach>
 			<tr>
 				<td>
-					<td><a class="btn btn-primary" href="UserFormServlet?id=-1">Create</a></td>
+					<%-- Pas de parametre --%>
+					<td><a class="btn btn-primary" href="UserFormServlet">Create</a></td>
 				</td>
 			</tr>
 	</table>

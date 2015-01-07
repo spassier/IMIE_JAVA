@@ -14,12 +14,22 @@
 	<jsp:include page="Header.jsp"></jsp:include>
 	
 		<form method="post">
+			<%-- Un input hidden pour recuperer l'id necessaire au create --%>
+			<input type="hidden" value="${user.id}" name="id">
 			<label>Login</label>
-			<input type="text" value="${user.login}" readonly />
+			<input type="text" name="loginInput"value="${user.login}" />
 			<label>Password</label>
 			<input type="text" name="passwordInput" value="${user.password}" />
-			<%--TP10 : inclure un bouton pour updater  --%>
-			<input class="btn btn-danger" type="submit" value="Update" />
+			<%--TP9/10 : inclure un bouton pour updater et creer  --%>
+			<%-- Un seul bouton d'afficher dynamiquement selon qu'il existe un user ou pas --%>
+			<c:choose>
+				<c:when test="${empty user}">
+					<input class="btn btn-primary" type="submit" value="Create" />
+				</c:when>
+				<c:otherwise>
+					<input class="btn btn-danger" type="submit" value="Update" />
+				</c:otherwise>
+			</c:choose>
 		</form>
 </body>
 </html>
