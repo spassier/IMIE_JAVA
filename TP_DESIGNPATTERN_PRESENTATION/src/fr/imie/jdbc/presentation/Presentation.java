@@ -11,8 +11,9 @@ import java.util.Scanner;
 
 import fr.imie.jdbc.DTO.PersonneDTO;
 import fr.imie.jdbc.DTO.PromotionDTO;
-import fr.imie.jdbc.service.IService;
-import fr.imie.jdbc.service.Service;
+import fr.imie.jdbc.ipresentation.IPresentation;
+import fr.imie.jdbc.iservice.IService;
+import fr.imie.jdbc.itransverse.IFactory;
 
 
 /**
@@ -21,13 +22,22 @@ import fr.imie.jdbc.service.Service;
  */
 public class Presentation implements IPresentation {
 
+	IFactory factory = null;
 	Scanner scanner;
 
 	/**
 	 * 
 	 */
 	public Presentation() {
+		super();
 		scanner = new Scanner(System.in);
+	}
+	
+	public Presentation(IFactory factory)
+	{
+		super();
+		scanner = new Scanner(System.in);
+		this.factory = factory;
 	}
 
 	/*
@@ -39,11 +49,8 @@ public class Presentation implements IPresentation {
 	public void start() {
 
 		// instantiation du service
-		IService service = new Service();
+		//IService service = Service.getInstance();
 		
-		// instantiation du DAO
-		//IPersonneDAO personneDAO = new PersonneDAO();
-		//IPromotionDAO promotionDAO = new PromotionDAO();
 
 		// TP1
 		Boolean endAppli = false;
@@ -70,15 +77,14 @@ public class Presentation implements IPresentation {
 
 			switch (menuNumber) {
 			case 1:
-				personneDTOs = viewPersonne(service/*personneDAO*/);
+				personneDTOs = viewPersonne(factory.createService() /*service*/);
 
 				break;
 
 			case 2:
 				// TP 2
-				selectedPersonne = viewAndSelectPersonne(service/*personneDAO*/);
-				System.out
-						.format("nom : %s \nprenom :  %s\ndateNaiss : %s\ntel %s\npromotion : %s\n\n",
+				selectedPersonne = viewAndSelectPersonne(factory.createService() /*service*/);
+				System.out.format("nom : %s \nprenom :  %s\ndateNaiss : %s\ntel %s\npromotion : %s\n\n",
 								selectedPersonne.getNom(), selectedPersonne
 										.getPrenom(), selectedPersonne
 										.getDateNaiss(), selectedPersonne
@@ -86,7 +92,6 @@ public class Presentation implements IPresentation {
 										.getPromotionDTO().getLibelle());
 				break;
 			case 3:
-
 				PersonneDTO personneDTO = new PersonneDTO();
 				System.out.print("nom :  ");
 				String nom = scanner.nextLine();
@@ -101,23 +106,23 @@ public class Presentation implements IPresentation {
 				Date date = inputDate();
 				personneDTO.setDateNaiss(date);
 				//personneDTO = personneDAO.insert(personneDTO);
-				personneDTO = service.insertPersonneDTO(personneDTO);
-				System.out.format("nouvel id inséré : %s\n",
-						personneDTO.getId());
+				
+				personneDTO = factory.createService().insertPersonneDTO(personneDTO);// service.insertPersonneDTO(personneDTO);
+				System.out.format("nouvel id inséré : %s\n",personneDTO.getId());
 				break;
 
 			case 4:
 
-				selectedPersonne = viewAndSelectPersonne(service/*personneDAO*/);
+				selectedPersonne = viewAndSelectPersonne(factory.createService()/*service*/);
 				//personneDAO.delete(selectedPersonne);
-				service.deletePersonneDTO(selectedPersonne);
+				factory.createService().deletePersonneDTO(selectedPersonne); //	service.deletePersonneDTO(selectedPersonne);
 				break;
 
 			case 5:
 
-				selectedPersonne = viewAndSelectPersonne(service/*personneDAO*/);
+				selectedPersonne = viewAndSelectPersonne(factory.createService()/*service*/);
 				//selectedPersonne = personneDAO.findById(selectedPersonne);
-				selectedPersonne = service.findPersonneDTO(selectedPersonne);
+				selectedPersonne = factory.createService().findPersonneDTO(selectedPersonne); // service.findPersonneDTO(selectedPersonne);
 				System.out.format("nom :  %s", selectedPersonne.getNom());
 				if (questionModif()) {
 					selectedPersonne.setNom(scanner.nextLine());
@@ -140,12 +145,12 @@ public class Presentation implements IPresentation {
 				}
 
 				//personneDAO.update(selectedPersonne);
-				service.updatePersonneDTO(selectedPersonne);
+				factory.createService().updatePersonneDTO(selectedPersonne); //service.updatePersonneDTO(selectedPersonne);
 				
 				break;
 			case 6:
 				//List<PromotionDTO> promotionDTOs = promotionDAO.findAll();
-				List<PromotionDTO> promotionDTOs = service.findAllPromotionDTO();
+				List<PromotionDTO> promotionDTOs = factory.createService().findAllPromotionDTO();// service.findAllPromotionDTO();
 				
 				Integer numLigne = 1;
 
@@ -157,8 +162,7 @@ public class Presentation implements IPresentation {
 				input = null;
 				input = inputInteger();
 				PromotionDTO selectedPromotion =  promotionDTOs.get(input - 1);
-				//promotionDAO.delete(selectedPromotion);
-				service.deletePromotionDTO(selectedPromotion);
+				factory.createService().deletePersonneDTO(selectedPersonne);// service.deletePromotionDTO(selectedPromotion);
 				
 				break;
 			default:

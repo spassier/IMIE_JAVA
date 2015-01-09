@@ -9,7 +9,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLType;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -17,6 +16,9 @@ import java.util.List;
 
 import fr.imie.jdbc.DTO.PersonneDTO;
 import fr.imie.jdbc.DTO.PromotionDTO;
+import fr.imie.jdbc.ipersistence.IPersonneDAO;
+import fr.imie.jdbc.ipersistence.IPromotionDAO;
+
 
 /**
  * @author imie
@@ -24,13 +26,27 @@ import fr.imie.jdbc.DTO.PromotionDTO;
  */
 public class PersonneDAO implements IPersonneDAO {
 
+	private static PersonneDAO instance = null;
+	
 	/**
-	 * 
+	 * Constructeur private car utilise un pattern singleton
 	 */
-	public PersonneDAO() {
+	private PersonneDAO() {
 		// TODO Auto-generated constructor stub
 	}
 
+	/*
+	 * Singleton
+	 */
+	public static synchronized PersonneDAO getInstance()
+	{
+		if ( instance == null )
+		{
+			instance = new PersonneDAO();
+		}
+		return instance;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -38,15 +54,13 @@ public class PersonneDAO implements IPersonneDAO {
 	 */
 	@Override
 	public List<PersonneDTO> findAll() {
-		Connection connection = null;
+		Connection connection =  null;
 		Statement statement = null;
 		ResultSet resultSet = null;
 		List<PersonneDTO> retour = new ArrayList<PersonneDTO>();
 		try {
 
-			connection = DriverManager.getConnection(
-					"jdbc:postgresql://localhost:5432/imie", "postgres",
-					"postgres");
+			 connection = /*ConnectionDB.getInstance().provideConnection(); */DriverManager.getConnection("jdbc:postgresql://localhost:5432/imie", "postgres","postgres");
 
 			statement = connection.createStatement();
 			resultSet = statement
@@ -134,7 +148,7 @@ public class PersonneDAO implements IPersonneDAO {
 		retour.setDateNaiss(resultSet.getDate("datenaiss"));
 		retour.setTel(resultSet.getString("tel"));
 	
-		IPromotionDAO promotionDAO = new PromotionDAO();
+		IPromotionDAO promotionDAO = PromotionDAO.getInstance();//new PromotionDAO();
 		PromotionDTO linkedPromotion = new PromotionDTO();
 		linkedPromotion.setId(resultSet.getInt("promotion_id"));
 		if (!resultSet.wasNull()) {
@@ -152,12 +166,9 @@ public class PersonneDAO implements IPersonneDAO {
 		PersonneDTO retour = null;
 		try {
 
-			connection = DriverManager.getConnection(
-					"jdbc:postgresql://localhost:5432/imie", "postgres",
-					"postgres");
+			connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/imie", "postgres","postgres");
 
-			preparedStatement = connection
-					.prepareStatement("insert into personne(nom, prenom, datenaiss,tel) values(?,?,?,?) returning nom, prenom, datenaiss,tel,id,promotion_id");
+			preparedStatement = connection.prepareStatement("insert into personne(nom, prenom, datenaiss,tel) values(?,?,?,?) returning nom, prenom, datenaiss,tel,id,promotion_id");
 			preparedStatement.setString(1, dto.getNom());
 			preparedStatement.setString(2, dto.getPrenom());
 			Date dateNaiss = new Date(dto.getDateNaiss().getTime());
@@ -199,20 +210,20 @@ public class PersonneDAO implements IPersonneDAO {
 	}
 
 	@Override
-	public PersonneDTO update(PersonneDTO dto, Connection connectionCaller) {
+	public PersonneDTO update(PersonneDTO dto, Connection connectionCaller)
+	{
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		PersonneDTO retour = null;
 		try {
 
-			if (connectionCaller != null) {
+			if (connectionCaller != null)
+			{
 				connection = connectionCaller;
-			} else {
-				connection = DriverManager.getConnection(
-						"jdbc:postgresql://localhost:5432/imie", "postgres",
-						"postgres");
-
+			} else
+			{
+				connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/imie", "postgres","postgres");
 			}
 
 			preparedStatement = connection
@@ -269,9 +280,7 @@ public class PersonneDAO implements IPersonneDAO {
 		PersonneDTO retour = null;
 		try {
 
-			connection = DriverManager.getConnection(
-					"jdbc:postgresql://localhost:5432/imie", "postgres",
-					"postgres");
+			connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/imie", "postgres","postgres");
 
 			preparedStatement = connection
 					.prepareStatement("delete from personne where id =?");
@@ -307,28 +316,29 @@ public class PersonneDAO implements IPersonneDAO {
 	}
 
 	@Override
-	public List<PersonneDTO> findByDTO(PersonneDTO findParameter,
-			Connection connectionCaller) {
+	public List<PersonneDTO> findByDTO(PersonneDTO findParameter, Connection connectionCaller) {
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet resultSet = null;
+		
 		List<PersonneDTO> retour = new ArrayList<PersonneDTO>();
 		try {
 
-			if (connectionCaller == null) {
-				connection = DriverManager.getConnection(
-						"jdbc:postgresql://localhost:5432/imie", "postgres",
-						"postgres");
-			} else {
+			if (connectionCaller == null)
+			{
+				connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/imie", "postgres","postgres");
+			}
+			else
+			{
 				connection = connectionCaller;
 			}
 
 			statement = connection.createStatement();
 			String query = "select id, nom, prenom, datenaiss, tel, promotion_id from personne";
 
-			if (findParameter.getPromotionDTO() != null) {
-				query=query.concat(" where promotion_id =".concat(findParameter
-						.getPromotionDTO().getId().toString()));
+			if (findParameter.getPromotionDTO() != null)
+			{
+				query=query.concat(" where promotion_id =".concat(findParameter.getPromotionDTO().getId().toString()));
 			}
 
 			resultSet = statement.executeQuery(query);
