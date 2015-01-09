@@ -47,4 +47,16 @@ public class ConnectionDB implements IConnectionDB
 		
 		return connection;
 	}
+	
+	@Override
+	public void closeConnection(Connection connection){
+		try {
+			if (connection != null && !connection.isClosed()) {
+				connection.close();
+			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException("erreure applicative", e);
+		}
+	}
 }
