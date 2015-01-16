@@ -27,5 +27,6 @@
 		<input type="text" value="${EuroValue}" />
 	</form>
 	
+	<p><c:out value="${historic}"/> </p>
 </body>
 </html>

@@ -20,7 +20,10 @@ public class ConvertServlet extends HttpServlet {
 	@Inject @Named("Euro2Dollar") private IConvert converterEuro2Dollar;
 	@Inject @Named("Dollar2Euro") private IConvert converterDollar2Euro;
 	
-    /**
+	@Inject
+	IHistoric historic;
+    
+	/**
      * @see HttpServlet#HttpServlet()
      */
     public ConvertServlet() {
@@ -42,9 +45,15 @@ public class ConvertServlet extends HttpServlet {
 	
 		if ( request.getParameter("DollarInput") != null )
 		{
-			Float valueToConvert = Float.valueOf(request.getParameter("DollarInput"));
-			valueToConvert = converterDollar2Euro.convert(valueToConvert);
-			request.setAttribute("EuroValue", valueToConvert);
+			Float valueToConvertInitial = Float.valueOf(request.getParameter("DollarInput"));
+			Float valueToConvertFinal = null;
+			valueToConvertFinal = converterDollar2Euro.convert(valueToConvertInitial);
+			request.setAttribute("EuroValue", valueToConvertFinal);
+			
+			DataGui dataGui = new DataGui();
+			dataGui.SetDataInitial(valueToConvertInitial);
+			dataGui.SetDataFinal(valueToConvertFinal);
+			historic.AddHistoric(dataGui);
 		}
 		
 		if ( request.getParameter("EuroInput") != null )
