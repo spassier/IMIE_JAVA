@@ -47,7 +47,7 @@ public class ConvertServlet extends HttpServlet {
 			request.setAttribute("EuroValue", valueToConvert);
 		}
 		
-		if (  request.getParameter("EuroInput") != null )
+		if ( request.getParameter("EuroInput") != null )
 		{
 			Float valueToConvert = Float.valueOf(request.getParameter("EuroInput"));
 			valueToConvert = converterEuro2Dollar.convert(valueToConvert);
