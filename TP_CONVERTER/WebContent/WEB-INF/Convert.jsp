@@ -9,13 +9,23 @@
 <title>Money Converter</title>
 </head>
 <body>
-	<h3>Converter</h3>
+	<h2>Converter</h3>
 	<form method="post">
-		<label>Value</label>
-		<input type="text" name="valueInput" />
-		<label>Value Converted</label>
+		<label>€ to $</label>
+		<input type="text" name="EuroInput" />
+		<input type="submit" value="=> convert" />
+		<input type="text" value="${DollarValue}" />
+		<!--
 		<c:out value="${value}"/>
-		<input type="submit" value="Convert" />
+		-->
 	</form>
+	
+	<form method="post">
+		<label>$ to €</label>
+		<input type="text" name="DollarInput" />
+		<input type="submit" value="=> convert" />
+		<input type="text" value="${EuroValue}" />
+	</form>
+	
 </body>
 </html>
