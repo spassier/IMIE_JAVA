@@ -15,6 +15,7 @@ public interface IService
 	public abstract PersonneDTO insertPersonneDTO(PersonneDTO personne);
 	public abstract PersonneDTO findPersonneDTO(PersonneDTO personne);
 	public abstract PersonneDTO updatePersonneDTO(PersonneDTO personne);
+	public abstract List<PersonneDTO> findAllPersonne();
 	
 	// Promotion
 	public abstract void deletePromotionDTO(PromotionDTO promotion);

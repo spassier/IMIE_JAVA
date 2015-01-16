@@ -4,8 +4,9 @@ import java.sql.Connection;
 import java.util.List;
 
 import fr.imie.jdbc.DTO.PersonneDTO;
+import fr.imie.jdbc.itransactional.ITransation;
 
-public interface IPersonneDAO {
+public interface IPersonneDAO extends ITransation {
 	public abstract List<PersonneDTO> findAll();
 	public abstract PersonneDTO findById(PersonneDTO dto);
 	public abstract PersonneDTO insert(PersonneDTO dto);

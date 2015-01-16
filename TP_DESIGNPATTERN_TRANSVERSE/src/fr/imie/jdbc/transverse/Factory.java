@@ -39,7 +39,7 @@ public class Factory implements IFactory
 
 	@Override
 	public IPersonneDAO createPersonneDAO() {
-		return PersonneDAO.getInstance();
+		return new ProxyPersonneDAO(PersonneDAO.getInstance());
 	}
 
 	@Override

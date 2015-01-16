@@ -18,15 +18,17 @@ import fr.imie.jdbc.DTO.PersonneDTO;
 import fr.imie.jdbc.DTO.PromotionDTO;
 import fr.imie.jdbc.ipersistence.IPersonneDAO;
 import fr.imie.jdbc.ipersistence.IPromotionDAO;
+import fr.imie.jdbc.itransverse.ConnectionDB;
 
 
 /**
  * @author imie
  *
  */
-public class PersonneDAO implements IPersonneDAO {
+public class PersonneDAO extends ConnectionDB implements IPersonneDAO {
 
 	private static PersonneDAO instance = null;
+	private Connection connection = null;
 	
 	/**
 	 * Constructeur private car utilise un pattern singleton
@@ -43,8 +45,19 @@ public class PersonneDAO implements IPersonneDAO {
 		if ( instance == null )
 		{
 			instance = new PersonneDAO();
+			
 		}
 		return instance;
+	}
+
+	@Override
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+	@Override
+	public Connection getConnection() {
+		return connection;
 	}
 	
 	/*
@@ -64,7 +77,7 @@ public class PersonneDAO implements IPersonneDAO {
 
 			statement = connection.createStatement();
 			resultSet = statement
-					.executeQuery("select id, nom, prenom, datenaiss, tel, promotion_id from personne");
+					.executeQuery("select id, nom, prenom, datenaiss, tel, promotion_id, password from personne");
 
 			while (resultSet.next()) {
 
@@ -106,17 +119,12 @@ public class PersonneDAO implements IPersonneDAO {
 					"postgres");
 
 			preparedStatement = connection
-					.prepareStatement("select nom, prenom, id, datenaiss,tel,promotion_id from personne where id=?");
+					.prepareStatement("select nom, prenom, id, datenaiss,tel,promotion_id, password from personne where id=?");
 			preparedStatement.setInt(1, dto.getId());
 			resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				retour = buildDTO(resultSet);
 			}
-			
-			
-
-			
-
 		} catch (SQLException e) {
 			throw new RuntimeException("erreure applicative", e);
 		} finally {
@@ -147,7 +155,8 @@ public class PersonneDAO implements IPersonneDAO {
 		retour.setPrenom(resultSet.getString("prenom"));
 		retour.setDateNaiss(resultSet.getDate("datenaiss"));
 		retour.setTel(resultSet.getString("tel"));
-	
+		retour.setPassword(resultSet.getString("password"));
+		
 		IPromotionDAO promotionDAO = PromotionDAO.getInstance();//new PromotionDAO();
 		PromotionDTO linkedPromotion = new PromotionDTO();
 		linkedPromotion.setId(resultSet.getInt("promotion_id"));
@@ -325,7 +334,15 @@ public class PersonneDAO implements IPersonneDAO {
 		try {
 
 			if (connectionCaller == null)
-			{
+			{			@Override
+			public void setConnection(Connection connection) {
+				this.connection = connection;
+			}
+
+			@Override
+			public Connection getConnection() {
+				return connection;
+			}
 				connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/imie", "postgres","postgres");
 			}
 			else
@@ -334,7 +351,7 @@ public class PersonneDAO implements IPersonneDAO {
 			}
 
 			statement = connection.createStatement();
-			String query = "select id, nom, prenom, datenaiss, tel, promotion_id from personne";
+			String query = "select id, nom, prenom, datenaiss, tel, promotion_id, password from personne";
 
 			if (findParameter.getPromotionDTO() != null)
 			{

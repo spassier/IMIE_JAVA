@@ -1,7 +1,6 @@
 package fr.imie.jdbc.service;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,8 +11,9 @@ import fr.imie.jdbc.DTO.PromotionDTO;
 import fr.imie.jdbc.ipersistence.IPersonneDAO;
 import fr.imie.jdbc.ipersistence.IPromotionDAO;
 import fr.imie.jdbc.iservice.IService;
+import fr.imie.jdbc.itransverse.ConnectionDB;
 import fr.imie.jdbc.itransverse.IFactory;
-import fr.imie.jdbc.service.*;
+
 
 /*
  *  
@@ -22,11 +22,12 @@ import fr.imie.jdbc.service.*;
 /*
  * Service implement le design pattern FACADE
  */
-public class Service implements IService
+public class Service extends ConnectionDB implements IService
 {
 	private static Service instance = null;
 	private IPersonneDAO personneDAO;
 	private IPromotionDAO promotionDAO;
+	private Connection connection = null;
 	
 	/*
 	 * Constructeur : private car on implemente un pattern singleton
@@ -107,9 +108,7 @@ public class Service implements IService
 		
 		try {
 
-			connection = DriverManager.getConnection(
-					"jdbc:postgresql://localhost:5432/imie", "postgres",
-					"postgres");
+			connection = provideConnection(); //connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/imie", "postgres","postgres");
 			connection.setAutoCommit(false);
 
 //			IPersonneDAO personneDAO = new PersonneDAO();
@@ -125,6 +124,7 @@ public class Service implements IService
 			
 			promotionDAO.delete(selectedPromotion,connection);
 			
+
 			connection.commit();
 
 		} catch (SQLException e) {
@@ -142,17 +142,60 @@ public class Service implements IService
 				if (preparedStatement != null && !preparedStatement.isClosed()) {
 					preparedStatement.close();
 				}
+				/*
 				if (connection != null && !connection.isClosed()) {
 					connection.close();
 				}
+				*/
 			} catch (SQLException e) {
 				throw new RuntimeException("erreur applicative", e);
 			}
+			closeConnection(connection);
 		}
+	}
+	
+	@Override
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+	@Override
+	public Connection getConnection() {
+		return connection;
 	}
 	
 	public List<PromotionDTO> findAllPromotionDTO()
 	{
 		return promotionDAO.findAll();
+	}
+	
+	@Override
+	public List<PersonneDTO> findAllPersonne()
+	{
+		List<PersonneDTO> personneDTOs = personneDAO.findAll();
+		for (PersonneDTO personneDTO : personneDTOs)
+		{
+			completePersonneDTO(personneDTO);
+		}
+		return personneDTOs;
+	}
+	
+	private void completePersonneDTO(PersonneDTO personneDTO)
+	{
+		if (personneDTO.getPromotionDTO() != null && personneDTO.getPromotionDTO().getId() != null)
+		{
+			PromotionDTO findedPromotion = promotionDAO.findById(personneDTO.getPromotionDTO());
+			personneDTO.setPromotionDTO(findedPromotion);
+		}
+	}
+	
+	@Override
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+	@Override
+	public Connection getConnection() {
+		return connection;
 	}
 }
