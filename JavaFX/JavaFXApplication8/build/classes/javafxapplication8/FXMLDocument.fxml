@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxapplication8.FXMLDocumentController">
+   <children>
+      <MenuBar onContextMenuRequested="#handleMenuRequested" prefHeight="29.0" prefWidth="300.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Contacts">
+            <items>
+                  <MenuItem fx:id="newContact" mnemonicParsing="false" onAction="#handleOnActionNew" text="New" />
+                  <Menu mnemonicParsing="false" text="Display">
+                    <items>
+                      <MenuItem fx:id="list" mnemonicParsing="false" onAction="#handleOnActionList" text="List" />
+                        <MenuItem mnemonicParsing="false" text="Tile" />
+                    </items>
+                  </Menu>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+              <MenuItem fx:id="close" mnemonicParsing="false" onAction="#handleOnActionClose" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Share">
+            <items>
+              <MenuItem mnemonicParsing="false" text="IP" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem fx:id="help" mnemonicParsing="false" onAction="#handleOnActionHelp" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <ListView fx:id="listview" layoutY="29.0" onContextMenuRequested="#handleMenuRequested" prefHeight="270.0" prefWidth="300.0" />
+   </children>
+</AnchorPane>
