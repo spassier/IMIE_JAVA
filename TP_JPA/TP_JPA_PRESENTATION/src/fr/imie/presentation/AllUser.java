@@ -1,6 +1,7 @@
 package fr.imie.presentation;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -13,19 +14,19 @@ import fr.imie.model.Personne;
 import fr.imie.service.PersonneServiceLocal;
 
 /**
- * Servlet implementation class OneUser
+ * Servlet implementation class AllUser
  */
-@WebServlet("/OneUser")
-public class OneUser extends HttpServlet {
+@WebServlet("/AllUser")
+public class AllUser extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-      
+
 	@EJB
 	PersonneServiceLocal personneService;
 	
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public OneUser() {
+    public AllUser() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,15 +35,11 @@ public class OneUser extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String idString = request.getParameter("id");
-		Integer id = Integer.valueOf(idString);
 		
-		Personne personne = new Personne();
-		personne.setId(id);
-		personne = personneService.findById(personne);
+		List<Personne> personnes = personneService.findAll();
 		
-		request.setAttribute("Personne", personne);
-		request.getRequestDispatcher("/WEB-INF/Personne.jsp").forward(request, response);
+		request.setAttribute("Personnes", personnes);
+		request.getRequestDispatcher("/WEB-INF/Personnes.jsp").forward(request, response);
 	}
 
 	/**
@@ -50,18 +47,13 @@ public class OneUser extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Integer id = Integer.valueOf(request.getParameter("id"));
-		String name = request.getParameter("nameInput");
-		String lastname = request.getParameter("lastnameInput");
+		Integer idTodelete = Integer.valueOf(request.getParameter("deleteInput"));
 		
-		Personne personneToUpdate = new Personne();
-		personneToUpdate.setId(id);
-		if ( !name.isEmpty() )
-			personneToUpdate.setNom(name);
-		if (!name.isEmpty() )
-			personneToUpdate.setPrenom(lastname);
+		System.out.println(idTodelete);
 		
-		personneService.update(personneToUpdate);
+		Personne personneToDelete = new Personne();
+		personneToDelete.setId(idTodelete);
+		personneService.delete(personneToDelete);
 
 		response.sendRedirect("AllUser");
 	}

@@ -3,5 +3,6 @@
 	<persistence-unit name="TP_JPA" transaction-type="JTA" >
 		<jta-data-source>java:/datasource/imie</jta-data-source>
 		<class>fr.imie.model.Personne</class>
+		<class>fr.imie.model.Promotion</class>
 	</persistence-unit>
 </persistence>

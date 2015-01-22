@@ -7,7 +7,20 @@
 <title>TP_JPA - Personne</title>
 </head>
 <body>
-	<p><c:out value="${Personne.nom}"></c:out></p>
-	<p><c:out value="${Personne.prenom}"></c:out></p>
+	<form method="post">
+		<div>User</div>
+		<div>
+			<!-- for et id utiliser pour ancrer le lablel a son input, en cliquant sur le lable, le input est automatiquement selectionné -->
+			<label for="name">Name</label> 
+			<input id="name" type="text" name="nameInput" value="${Personne.nom}" />
+		</div>
+		<div>
+			<label for="lastname">Lastname</label>
+			<input id="lastname" type="text" name="lastnameInput" value="${Personne.prenom}" />
+		</div>
+		<div>
+			<input type="submit" value="Update" />
+		</div>
+	</form>
 </body>
 </html>

@@ -13,10 +13,10 @@ import fr.imie.model.Personne;
 import fr.imie.service.PersonneServiceLocal;
 
 /**
- * Servlet implementation class OneUser
+ * Servlet implementation class NewUser
  */
-@WebServlet("/OneUser")
-public class OneUser extends HttpServlet {
+@WebServlet("/NewUser")
+public class NewUser extends HttpServlet {
 	private static final long serialVersionUID = 1L;
       
 	@EJB
@@ -25,7 +25,7 @@ public class OneUser extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public OneUser() {
+    public NewUser() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,15 +34,7 @@ public class OneUser extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String idString = request.getParameter("id");
-		Integer id = Integer.valueOf(idString);
-		
-		Personne personne = new Personne();
-		personne.setId(id);
-		personne = personneService.findById(personne);
-		
-		request.setAttribute("Personne", personne);
-		request.getRequestDispatcher("/WEB-INF/Personne.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/NewPersonne.jsp").forward(request, response);
 	}
 
 	/**
@@ -50,19 +42,15 @@ public class OneUser extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Integer id = Integer.valueOf(request.getParameter("id"));
 		String name = request.getParameter("nameInput");
 		String lastname = request.getParameter("lastnameInput");
 		
-		Personne personneToUpdate = new Personne();
-		personneToUpdate.setId(id);
-		if ( !name.isEmpty() )
-			personneToUpdate.setNom(name);
-		if (!name.isEmpty() )
-			personneToUpdate.setPrenom(lastname);
+		Personne PersonneToCreate = new Personne();
+		PersonneToCreate.setNom(name);
+		PersonneToCreate.setPrenom(lastname);
+		personneService.create(PersonneToCreate);
 		
-		personneService.update(personneToUpdate);
-
 		response.sendRedirect("AllUser");
 	}
+
 }

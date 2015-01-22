@@ -33,9 +33,13 @@ public class Personne implements Serializable {
 	@Column(name="prenom")
 	private String prenom;
 
-	@Column(name="promotion_id")
-	private Integer promotionId;
-
+	//@Column(name="promotion_id")
+	//private int promotionId;
+	
+	@ManyToOne
+	@JoinColumn(name="promotion_id")
+	private Promotion promotion;
+	
 	@Column(name="tel")
 	private String tel;
 
@@ -81,15 +85,25 @@ public class Personne implements Serializable {
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
 	}
-
-	public Integer getPromotionId() {
+	
+	/*
+ 	public int getPromotionId() {
 		return this.promotionId;
 	}
 
-	public void setPromotionId(Integer promotionId) {
+	public void setPromotionId(int promotionId) {
 		this.promotionId = promotionId;
 	}
+	*/
+	
+	public Promotion getPromotion() {
+		return this.promotion;
+	}
 
+	public void setPromotion(Promotion promotion) {
+		this.promotion = promotion;
+	}
+	 
 	public String getTel() {
 		return this.tel;
 	}
