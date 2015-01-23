@@ -8,7 +8,7 @@
 </head>
 <body>
 	<form method="post">
-		<div>User</div>
+		<div>New User</div>
 		<div>
 			<label>Name</label>
 			<input type="text" name="nameInput" value="${Personne.nom}" placeholder="Enter name" />
@@ -16,6 +16,15 @@
 		<div>
 			<label>Lastname</label>
 			<input type="text" name="lastnameInput" value="${Personne.prenom}" placeholder="Enter lastname" />
+		</div>
+		<div>
+			<label>Promotion</label>
+			<select name="promotionInput">
+				<option value=""></option>
+				<c:forEach items="${Promotions}" var="promotion">
+					<option value="${promotion.id}"><c:out value="${promotion.libelle}"></c:out></option>
+				</c:forEach>
+			</select>
 		</div>
 		<div>
 			<input type="submit" value="Create" />

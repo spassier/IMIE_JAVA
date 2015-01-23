@@ -1,6 +1,8 @@
 package fr.imie.presentation;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.imie.model.Personne;
+import fr.imie.model.Promotion;
 import fr.imie.service.PersonneServiceLocal;
 
 /**
@@ -21,6 +24,7 @@ public class NewUser extends HttpServlet {
       
 	@EJB
 	PersonneServiceLocal personneService;
+
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -34,6 +38,10 @@ public class NewUser extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		List<Promotion> promotions = personneService.findAllPromotions();
+		
+		request.setAttribute("Promotions", promotions);
 		request.getRequestDispatcher("/WEB-INF/NewPersonne.jsp").forward(request, response);
 	}
 
@@ -44,13 +52,24 @@ public class NewUser extends HttpServlet {
 		
 		String name = request.getParameter("nameInput");
 		String lastname = request.getParameter("lastnameInput");
+		String promoIdString = request.getParameter("promotionInput");
 		
-		Personne PersonneToCreate = new Personne();
-		PersonneToCreate.setNom(name);
-		PersonneToCreate.setPrenom(lastname);
-		personneService.create(PersonneToCreate);
-		
+		Logger.getAnonymousLogger().info("Promo id selected = " + promoIdString);
+
+		Personne personneToCreate = new Personne();
+		personneToCreate.setNom(name);
+		personneToCreate.setPrenom(lastname);
+
+		Promotion promotion = null;
+		if ( !promoIdString.isEmpty() )
+		{
+			promotion = new Promotion();
+			promotion.setId(Integer.valueOf(promoIdString));
+		}
+		personneToCreate.setPromotion(promotion);
+
+		personneService.create(personneToCreate);
+
 		response.sendRedirect("AllUser");
 	}
-
 }

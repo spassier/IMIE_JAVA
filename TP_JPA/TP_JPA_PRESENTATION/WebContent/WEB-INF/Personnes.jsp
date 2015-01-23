@@ -12,12 +12,13 @@
 			<th>Name</th>
 			<th>Lastname</th>
 			<th>Promotion</th>
+			<th>Promotion selection</th>
 		</tr>
 		<c:forEach items="${Personnes}" var="personne">
 			<tr>
 				<td><a href="OneUser?id=${personne.id}"><c:out value="${personne.nom}"></c:out></a></td>
 				<td><a href="OneUser?id=${personne.id}"><c:out value="${personne.prenom}"></c:out></a></td>
-				<td><c:out value="${personne.promotion.libelle}"></c:out></td>
+				<td><a href="PromotionForm?id=${personne.promotion.id}"><c:out value="${personne.promotion.libelle}"></c:out></a></td>
 				<td>
 					<form method="post">
 						<input type="hidden" name="deleteInput" value="${personne.id}" />
@@ -27,7 +28,10 @@
 			</tr>
 		</c:forEach>
 		<tr>
-			<a href="NewUser">Create</a>
+			<a href="NewUser">Create User</a>
+		</tr>
+		<tr>
+			<a href="NewPromotion">Create Promotion</a>
 		</tr>
 	</table>
 </body>

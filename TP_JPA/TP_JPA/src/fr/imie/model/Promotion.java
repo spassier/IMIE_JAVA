@@ -11,13 +11,17 @@ import java.util.List;
  */
 @Entity
 @Table(name="promotion")
-@NamedQuery(name="Promotion.findAll", query="SELECT p FROM Promotion p")
+@NamedQueries({
+@NamedQuery(name="Promotion.findAll", query="SELECT p FROM Promotion p"),
+@NamedQuery(name="Promotion.findById", query="SELECT p FROM Promotion p WHERE p.id = :id")
+})
 public class Promotion implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
+
 	private int id;
 
 	@Column(name="libelle")

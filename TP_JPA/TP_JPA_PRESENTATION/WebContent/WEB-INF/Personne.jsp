@@ -8,7 +8,7 @@
 </head>
 <body>
 	<form method="post">
-		<div>User</div>
+		<div>Edit User</div>
 		<div>
 			<!-- for et id utiliser pour ancrer le lablel a son input, en cliquant sur le lable, le input est automatiquement selectionné -->
 			<label for="name">Name</label> 
@@ -17,6 +17,18 @@
 		<div>
 			<label for="lastname">Lastname</label>
 			<input id="lastname" type="text" name="lastnameInput" value="${Personne.prenom}" />
+		</div>
+		<div>
+			<select name="promotionInput">
+				<option value=""></option> <!-- ici on insere un champs vide au cas ou on on ne souhate pas de promotion -->
+				<c:forEach items="${Promotions}" var="promotion">
+					<c:set var="selected" value=""></c:set> <!-- Technique pour selectionner un champs dans un select  -->
+					<c:if test="${promotion.id == Personne.promotion.id}" >
+						<c:set var="selected" value="selected"></c:set>
+					</c:if>
+					<option value="${promotion.id}" ${selected}><c:out value="${promotion.libelle}"></c:out></option>
+				</c:forEach>
+			</select>
 		</div>
 		<div>
 			<input type="submit" value="Update" />

@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import javax.persistence.TemporalType;
 
 import fr.imie.model.Personne;
+import fr.imie.model.Promotion;
 
 /**
  * Session Bean implementation class PersonneService
@@ -83,5 +84,26 @@ public class PersonneService implements PersonneServiceLocal {
 	public void create(Personne personne) {
 		// Solution persist, pas d'autre solution (le CREATE n'existe pas en JPQL)
 		entityManager.persist(personne);
+	}
+
+	@Override
+	public List<Promotion> findAllPromotions() {
+    	Query query = entityManager.createNamedQuery("Promotion.findAll");
+    	return query.getResultList();
+	}
+
+	@Override
+	public List<Personne> findAllPersonneByPromotion(Promotion promotion) {
+		
+		Query query = entityManager.createNamedQuery("Promotion.findById");
+		query.setParameter("id", promotion.getId());
+		Promotion promotionFound = (Promotion)query.getSingleResult();
+		
+		for ( Personne personneItem : promotionFound.getPersonnes() )
+		{
+			// Boucle pour remplir la liste (OneToMany est en lazy...)
+		}
+		
+		return promotionFound.getPersonnes();
 	}
 }
