@@ -1,26 +1,47 @@
 package fr.imie.tennis;
 
-public class Jeux implements ISerialiser {
+import static org.mockito.Mockito.mock;
+
+public class Jeux {
 	
 	private ISerialiser jeuSerialiser;
 	private String score = "0-0";
+	
+
+
 	private Integer j1 = 0;
 	private Integer j2 = 0;
 	
 	public Jeux (ISerialiser serialiser) {
 		jeuSerialiser = serialiser;
 	}
+	
+	public Integer getJ1() {
+		return j1;
+	}
+
+	public void setJ1(Integer j1) {
+		this.j1 = j1;
+	}
+
+	public Integer getJ2() {
+		return j2;
+	}
+
+	public void setJ2(Integer j2) {
+		this.j2 = j2;
+	}
+	
 	/*
 	0 = 0
 	1 = 15
 	2 = 30
 	3 = 40
 	4 = egalite ou victoire
-	 */
+	*/
 	
 	public String getScore() {
 		
-
 		if ( (j1 < 4) && (j2 < 4) && !( j1 == 3 && j2 == 3 ) ) {
 			score = convertionPointsEnString(j1) + "-" + convertionPointsEnString(j2);
 		}
@@ -56,37 +77,18 @@ public class Jeux implements ISerialiser {
 		case 3:
 			score = "40";
 			break;
-		/*
-		case 4:
-			score = "Victoire";
-			break;
-		*/
 		default :
 			throw new IllegalStateException(); 
 		}
 		
 		return score;
 	}
-	public void joueur1MarqueUnPoint(/*Joueur joueur*/) {
+	public void joueur1MarqueUnPoint() {
 		j1++;
-		/*
-		joueur.marqueUnPoint();
-		if ( joueur.getPoints() == 4)
-			score = joueur.getPointsConvertionEnScore();
-		else
-			score = joueur.getPointsConvertionEnScore() + score.substring(score.indexOf("-"));
-			*/
 	}
 	
-	public void joueur2MarqueUnPoint(/*Joueur joueur*/) {
+	public void joueur2MarqueUnPoint() {
 		j2++;
-		/*
-		joueur.marqueUnPoint();
-		if ( joueur.getPoints() == 4)
-			score = joueur.getPointsConvertionEnScore();
-		else
-			score = score.substring(0, score.indexOf("-")) + "-" +  joueur.getPointsConvertionEnScore();
-			*/
 	}
 	
 	public void comparePointsJoueurs(Joueur joueur1, Joueur joueur2){
@@ -101,16 +103,11 @@ public class Jeux implements ISerialiser {
 		}
 	}
 
-	@Override
-	public void persist(Jeux jeux) {
-		jeuSerialiser.persist(this); 
-		
-	}
+	public void charger() {
 
-	@Override
-	public Jeux read() {
-
-		return jeuSerialiser.read();
+		Jeux jeu = jeuSerialiser.read();
+		this.setJ1(jeu.getJ1());
+		this.setJ2(jeu.getJ2());
 	}
 	
 }

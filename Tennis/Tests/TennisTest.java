@@ -1,26 +1,23 @@
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
 
+import static org.mockito.Mockito.*;
 import fr.imie.tennis.ISerialiser;
 import fr.imie.tennis.Jeux;
-import fr.imie.tennis.Joueur;
-import fr.imie.tennis.Serialiser;
 
 
 public class TennisTest {
 
 	private ISerialiser serialiser; 
 	private Jeux jeux;
-	//private Joueur joueur1;
-	//private Joueur joueur2;
 	
 	@Before
 	public void testInitialisationNouveauTest() {
-		serialiser = new Serialiser();
+		serialiser = new MockSerialiser();
 		jeux = new Jeux(serialiser);
-		//joueur1 = new Joueur();
-		//joueur2 = new Joueur();
 	}
 	
 	@Test
@@ -87,7 +84,6 @@ public class TennisTest {
 		jeux.joueur2MarqueUnPoint();
 		jeux.joueur2MarqueUnPoint();
 		jeux.joueur2MarqueUnPoint();
-		//jeux.comparePointsJoueurs(joueur1, joueur2);
 		Assert.assertEquals("Egalite", jeux.getScore() );
 	}
 	
@@ -100,7 +96,6 @@ public class TennisTest {
 		jeux.joueur2MarqueUnPoint();
 		jeux.joueur2MarqueUnPoint();
 		jeux.joueur1MarqueUnPoint();
-		//jeux.comparePointsJoueurs(joueur1, joueur2);
 		Assert.assertEquals("Avantage joueur1", jeux.getScore() );
 	}
 	
@@ -113,7 +108,6 @@ public class TennisTest {
 		jeux.joueur1MarqueUnPoint();
 		jeux.joueur1MarqueUnPoint();
 		jeux.joueur2MarqueUnPoint();
-		//jeux.comparePointsJoueurs(joueur1, joueur2);
 		Assert.assertEquals("Avantage joueur2", jeux.getScore() );
 	}
 	
@@ -127,7 +121,6 @@ public class TennisTest {
 		jeux.joueur1MarqueUnPoint();
 		jeux.joueur2MarqueUnPoint();
 		jeux.joueur1MarqueUnPoint();
-		//jeux.comparePointsJoueurs(joueur1, joueur2);
 		Assert.assertEquals("Egalite", jeux.getScore() );
 	}
 	
@@ -142,32 +135,44 @@ public class TennisTest {
 		jeux.joueur2MarqueUnPoint();
 		jeux.joueur1MarqueUnPoint();
 		jeux.joueur1MarqueUnPoint();
-		//jeux.comparePointsJoueurs(joueur1, joueur2);
 		Assert.assertEquals("Avantage joueur1", jeux.getScore() );
 	}
 	
 	@Test
-	public void testPersistScore0_0() {
-		jeux.persist(jeux);
-		Assert.assertEquals("0-0", jeux.read().getScore() );
+	public void testReadScore0_0() {
+		ISerialiser serialiser = mock(ISerialiser.class);
+		Jeux jeuTest = new Jeux(serialiser);
+		when(serialiser.read()).thenReturn(jeuTest);
+		Jeux jeu = new Jeux(serialiser);
+		jeu.charger();
+		
+		Assert.assertEquals("0-0", jeu.getScore() );
 
 	}
 	
 	@Test
-	public void testPersistScore15_15() {
-		jeux.joueur1MarqueUnPoint();
-		jeux.joueur2MarqueUnPoint();
-		jeux.persist(jeux);
-		Assert.assertEquals("15-15", jeux.read().getScore() );
+	public void testReadScore15_15() {
+		ISerialiser serialiser = mock(ISerialiser.class);
+		Jeux jeuTest = new Jeux(serialiser);
+		jeuTest.setJ1(1);
+		jeuTest.setJ2(1);
+		when(serialiser.read()).thenReturn(jeuTest);
+		Jeux jeu = new Jeux(serialiser);
+		jeu.charger();
+		
+		Assert.assertEquals("15-15", jeu.getScore() );
 	}
 	
 	@Test
-	public void testPersistScore30_30() {
-		jeux.joueur1MarqueUnPoint();
-		jeux.joueur1MarqueUnPoint();
-		jeux.joueur2MarqueUnPoint();
-		jeux.joueur2MarqueUnPoint();
-		jeux.persist(jeux);
-		Assert.assertEquals("30-30", jeux.read().getScore() );
+	public void testReadScore30_30() {
+		ISerialiser serialiser = mock(ISerialiser.class);
+		Jeux jeuTest = new Jeux(serialiser);
+		jeuTest.setJ1(2);
+		jeuTest.setJ2(2);
+		when(serialiser.read()).thenReturn(jeuTest);
+		Jeux jeu = new Jeux(serialiser);
+		jeu.charger();
+		
+		Assert.assertEquals("30-30", jeu.getScore() );
 	}
 }
