@@ -3,16 +3,17 @@ apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'eclipse'
+apply plugin: 'cargo'
 sourceCompatibility = 1.8
 
 group='imie'
 
 buildscript {
     repositories {
-        mavenCentral()
+        jcentral()
     }
     dependencies {
-
+	classpath 'org.gradle.api.plugins:gradle-cargo-plugin:1.5.1'
     }
 }
 
@@ -35,7 +36,7 @@ dependencies {
  def cargoVersion = '1.4.+'
  cargo "org.codehaus.cargo:cargo-core-uberjar:$cargoVersion",
         "org.codehaus.cargo:cargo-ant:$cargoVersion",
-		"org.wildfly:wildfly-controller-client:8.1.0.Final"
+		"org.wildfly:wildfly-controller-client:8.2.0.Final"
 }
 
 cargo {
