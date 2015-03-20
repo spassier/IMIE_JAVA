@@ -10,7 +10,7 @@ group='imie'
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'org.gradle.api.plugins:gradle-cargo-plugin:1.5.1'
