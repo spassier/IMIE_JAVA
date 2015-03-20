@@ -3,7 +3,6 @@ apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'eclipse'
-apply plugin: 'cargo'
 sourceCompatibility = 1.8
 
 group='imie'
@@ -13,7 +12,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.gradle.api.plugins:gradle-cargo-plugin:1.5.1'
+
     }
 }
 
